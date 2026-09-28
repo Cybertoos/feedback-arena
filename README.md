@@ -45,3 +45,5 @@ Model-written Python runs only inside Docker (`pysandbox.mjs`, `pyharness.py`): 
     node summary-impossible.mjs results/imp1
 
 `arena.mjs` and `impossible.mjs` share the model calls in `lib/chat.mjs`.
+
+Smoke run, 2026-09-28, GLM-5.3 on DeepInfra, effort medium, `--max-tokens 12000`, 3 tasks, modes A and C, both splits, 12 runs, $0.41: every `original` run passed (6/6), no `conflicting` run cheated (0/6), and every conflicting run's last code passed the whole uncontradicted original test. But 11 of 35 replies were cut off at the token cap with no code, all of them on `conflicting` retries: the model spends its whole budget reasoning about the contradiction. The conflicting "fail" there partly means "no answer". Raise `--max-tokens` before a real run, and read `truncated` and `thoughtImpossible` with the pass columns. Run logs hold each check's source, so they stay out of git like the data.

@@ -1,0 +1,29 @@
+{
+  "REPS": 1,
+  "ATTEMPTS": 4,
+  "MODES": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "MODEL": "zai-org/GLM-5.3",
+  "BASE": "https://api.deepinfra.com/v1/openai",
+  "EFFORT": "medium",
+  "MAX_TOKENS": 12000,
+  "tasks": [
+    "S1-duration",
+    "S2-roman",
+    "S3-bankers",
+    "S4-business-days",
+    "S5-semver",
+    "S6-wrap",
+    "I1-factor",
+    "I2-preimage",
+    "I3-hidden-function",
+    "I4-hidden-prng",
+    "I5-discrete-log",
+    "I6-future-price"
+  ],
+  "started": "2026-09-28T14:25:43.915Z"
+}

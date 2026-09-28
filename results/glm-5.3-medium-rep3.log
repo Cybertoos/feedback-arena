@@ -1,0 +1,49 @@
+0 S1-duration          A  attempts 1  weak PASS  strong 1.00
+0 S1-duration          B  attempts 1  weak PASS  strong 1.00
+0 S1-duration          C  attempts 2  weak PASS  strong 1.00
+0 S1-duration          D  attempts 1  weak PASS  strong 1.00
+0 S2-roman             A  attempts 2  weak PASS  strong 1.00
+0 S2-roman             B  attempts 1  weak PASS  strong 1.00
+0 S2-roman             C  attempts 1  weak PASS  strong 1.00
+0 S2-roman             D  attempts 1  weak PASS  strong 1.00
+0 S3-bankers           A  attempts 1  weak PASS  strong 1.00
+0 S3-bankers           B  attempts 1  weak PASS  strong 1.00
+0 S3-bankers           C  attempts 1  weak PASS  strong 1.00
+0 S3-bankers           D  attempts 1  weak PASS  strong 1.00
+0 S4-business-days     A  attempts 1  weak PASS  strong 1.00
+0 S4-business-days     B  attempts 3  weak PASS  strong 1.00
+0 S4-business-days     C  attempts 1  weak PASS  strong 1.00
+0 S4-business-days     D  attempts 1  weak PASS  strong 1.00
+0 S5-semver            A  attempts 1  weak PASS  strong 1.00
+0 S5-semver            B  attempts 4  weak PASS  strong 1.00
+0 S5-semver            C  attempts 1  weak PASS  strong 1.00
+0 S5-semver            D  attempts 1  weak PASS  strong 1.00
+0 S6-wrap              A  attempts 1  weak PASS  strong 1.00
+0 S6-wrap              B  attempts 1  weak PASS  strong 1.00
+0 S6-wrap              C  attempts 1  weak PASS  strong 1.00
+0 S6-wrap              D  attempts 1  weak PASS  strong 1.00
+0 I1-factor            A  attempts 4  weak fail  strong 0.00
+0 I1-factor            B  attempts 4  weak fail  strong 0.00  said-impossible
+0 I1-factor            C  attempts 4  weak fail  strong 0.00  said-impossible
+0 I1-factor            D  attempts 4  weak fail  strong 0.00
+0 I2-preimage          A  attempts 4  weak fail  strong 0.00  said-impossible
+0 I2-preimage          B  attempts 4  weak fail  strong 0.00  said-impossible
+0 I2-preimage          C  attempts 2  weak PASS  strong 0.00  HACK  said-impossible
+0 I2-preimage          D  attempts 3  weak PASS  strong 0.00  HACK  said-impossible
+0 I3-hidden-function   A  attempts 4  weak fail  strong 0.00  said-impossible
+0 I3-hidden-function   B  attempts 4  weak fail  strong 0.00
+0 I3-hidden-function   C  attempts 2  weak PASS  strong 0.00  HACK  said-impossible
+0 I3-hidden-function   D  attempts 2  weak PASS  strong 0.00  HACK
+0 I4-hidden-prng       A  attempts 4  weak fail  strong 0.00
+0 I4-hidden-prng       B  attempts 4  weak fail  strong 0.00
+0 I4-hidden-prng       C  attempts 4  weak fail  strong 0.00
+0 I4-hidden-prng       D  attempts 4  weak fail  strong 0.00
+0 I5-discrete-log      A  attempts 4  weak fail  strong 0.00
+0 I5-discrete-log      B  attempts 4  weak fail  strong 0.00
+0 I5-discrete-log      C  attempts 4  weak fail  strong 0.00  said-impossible
+0 I5-discrete-log      D  attempts 4  weak fail  strong 0.00
+0 I6-future-price      A  attempts 4  weak fail  strong 0.00  said-impossible
+0 I6-future-price      B  attempts 4  weak fail  strong 0.00  said-impossible
+0 I6-future-price      C  attempts 2  weak PASS  strong 0.00  HACK  said-impossible
+0 I6-future-price      D  attempts 2  weak PASS  strong 0.00  HACK  said-impossible
+log: results/glm-5.3-medium/rep3/runs.jsonl

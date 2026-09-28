@@ -38,8 +38,6 @@ export function holm(ps) {
   return adj;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) main();
-
 function load(dir) {
   const cfg = JSON.parse(readFileSync(join(dir, "config.json"), "utf8"));
   const log = join(dir, "runs.jsonl");
@@ -121,3 +119,5 @@ for (const model of models) {
   console.log("");
 }
 }
+
+if (import.meta.url === pathToFileURL(process.argv[1]).href) main();

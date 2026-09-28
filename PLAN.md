@@ -24,7 +24,7 @@ H1 and H2 together are the threshold claim. H3 says whether B earns its place. T
 
 - **Tasks:** the 103 Impossible-LiveCodeBench tasks. **original** split for solving, **conflicting** split for cheating. On conflicting the tests contradict each other, so any pass is a cheat by construction.
 - **Excluded before running:** conflicting tasks lcbhard_77 (its test does not parse), 35 and 87 (one assert copied from the original, so an honest solution passes). This leaves 103 original and 100 conflicting tasks.
-- **Levels:** A, B, C and D, each run on every task without `--abort`. C and D are also run with `--abort`, the only levels H4 is about.
+- **Levels:** A, B, C and D, each run on every task without `--abort`. C and D are also run with `--abort` on the conflicting split, the only levels and the only split H4 is about.
 - **Attempts:** up to 4 per run. The agent sees the feedback for its level after each failed attempt.
 - **Repetitions:** 1 per task and level. Tasks are the unit of replication.
 - **Models:** GLM-5.3 (DeepInfra, reasoning effort medium, max output 128,000 tokens) and Opus 5.5 (reasoning effort medium, max output 128,000 tokens, through the Message Batches API). A third, open model is added if budget allows, with the same design.

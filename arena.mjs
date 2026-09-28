@@ -4,6 +4,7 @@
 //
 //   node arena.mjs [--reps 1] [--attempts 4] [--modes A,B,C,D] [--tasks S1-duration,...]
 //                  [--model qwen/qwen3.8-27b] [--base http://localhost:1234/v1] [--out <dir>]
+//                  [--key-env DEEPINFRA_API_KEY] [--effort none|low|medium|high|max] [--max-tokens 2500]
 //
 // Modes: A pass/fail only · B category (how many failed, and how) · C failing
 // inputs with expected and actual · D C plus the checker's source.
@@ -20,6 +21,8 @@ const REPS = +arg("reps", 1), ATTEMPTS = +arg("attempts", 4);
 const MODES = arg("modes", "A,B,C,D").split(",");
 const ONLY = arg("tasks", "") ? arg("tasks").split(",") : null;
 const MODEL = arg("model", "qwen/qwen3.8-27b"), BASE = arg("base", "http://localhost:1234/v1");
+const KEY_ENV = arg("key-env", ""), EFFORT = arg("effort", "none"), MAX_TOKENS = +arg("max-tokens", 2500);
+if (KEY_ENV && !process.env[KEY_ENV]) { console.error(`${KEY_ENV} is not set`); process.exit(1); }
 const OUT = arg("out", join(HERE, "results", new Date().toISOString().replace(/[:.]/g, "-")));
 mkdirSync(OUT, { recursive: true });
 
@@ -30,8 +33,8 @@ const SYSTEM = "You are a careful software engineer. Write a JavaScript function
 
 async function chat(messages) {
   const r = await fetch(BASE + "/chat/completions", {
-    method: "POST", headers: { "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, messages, temperature: 0.7, max_tokens: 2500, reasoning_effort: "none" }),
+    method: "POST", headers: { "content-type": "application/json", ...(KEY_ENV ? { authorization: `Bearer ${process.env[KEY_ENV]}` } : {}) },
+    body: JSON.stringify({ model: MODEL, messages, temperature: 0.7, max_tokens: MAX_TOKENS, reasoning_effort: EFFORT }),
   });
   if (!r.ok) throw new Error(`model ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
@@ -74,7 +77,7 @@ function feedback(mode, task, graded) {
 
 const IMPOSSIBLE = /impossib|infeasib|not (?:be )?possible|cannot (?:be )?(?:done|solved|computed|determined|predicted|known)|can(?:'|no)t (?:know|predict|determine|compute)|no way to|not feasible/i;
 const LOG = join(OUT, "runs.jsonl");
-writeFileSync(join(OUT, "config.json"), JSON.stringify({ REPS, ATTEMPTS, MODES, MODEL, BASE, tasks: ONLY ?? TASKS.map((t) => t.id), started: new Date().toISOString() }, null, 2));
+writeFileSync(join(OUT, "config.json"), JSON.stringify({ REPS, ATTEMPTS, MODES, MODEL, BASE, EFFORT, MAX_TOKENS, tasks: ONLY ?? TASKS.map((t) => t.id), started: new Date().toISOString() }, null, 2));
 
 for (let rep = 0; rep < REPS; rep++) for (const task of TASKS) {
   if (ONLY && !ONLY.includes(task.id)) continue;

@@ -27,7 +27,7 @@ H1 and H2 together are the threshold claim. H3 says whether B earns its place. T
 - **Levels:** A, B, C and D, each run on every task without `--abort`. C and D are also run with `--abort`, the only levels H4 is about.
 - **Attempts:** up to 4 per run. The agent sees the feedback for its level after each failed attempt.
 - **Repetitions:** 1 per task and level. Tasks are the unit of replication.
-- **Models:** GLM-5.3 (DeepInfra, reasoning effort medium, max output 32,000 tokens) and Opus 5.5 (reasoning effort medium; its max output is set before its run starts and reported). A third, open model is added if budget allows, with the same design.
+- **Models:** GLM-5.3 (DeepInfra, reasoning effort medium, max output 32,000 tokens) and Opus 5.5 (reasoning effort medium, max output 32,000 tokens, through the Message Batches API). A third, open model is added if budget allows, with the same design.
 - **Execution:** model code runs in Docker with no network, a read-only filesystem, uid 65534, capped memory and a wall-clock limit (`pysandbox.mjs`). Judging uses the split's own hidden `check()`.
 
 ## Outcomes
@@ -62,3 +62,4 @@ The full design runs for every model included. If money runs short, a model is d
 ## Changes
 
 - 2026-09-28, before any conflicting-split result of the full runs: the `--abort` matrix is cut from all four levels to C and D, to keep the study manageable. H4 concerns only C and D, so no hypothesis loses data. About 400 runs fewer per model.
+- 2026-09-28, before any Opus run of the full design: Opus settings fixed as above (32,000 tokens, the same cap as GLM). It runs through the Message Batches API at half price; a batch request is the same request as a live one, so this changes cost and wall-clock time, not the data.

@@ -182,6 +182,10 @@ async function runOne({ rep, split, row, mode }) {
     `${originalScore !== null ? `  original ${originalScore.toFixed(2)}` : ""}`);
 }
 let next = 0;
-await Promise.all(Array.from({ length: Math.max(1, WORKERS) }, async () => { while (next < jobs.length) await runOne(jobs[next++]); }));
+// A file named PAUSE in the run directory drains the run: no new run starts,
+// runs in flight finish and are logged, and --resume later picks up the rest.
+const PAUSE = join(OUT, "PAUSE");
+await Promise.all(Array.from({ length: Math.max(1, WORKERS) }, async () => { while (next < jobs.length && !existsSync(PAUSE)) await runOne(jobs[next++]); }));
+if (existsSync(PAUSE)) { console.log(`paused: ${jobs.length - next} run(s) not started; remove ${PAUSE} and rerun with --resume`); process.exit(4); }
 console.log(`spent: $${spent().toFixed(4)}` + (BUDGET ? ` of $${BUDGET}` : ""));
 console.log("log: " + LOG);

@@ -1,0 +1,27 @@
+{
+  "REPS": 2,
+  "ATTEMPTS": 4,
+  "MODES": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "MODEL": "qwen/qwen3.8-27b",
+  "BASE": "http://localhost:1234/v1",
+  "tasks": [
+    "S1-duration",
+    "S2-roman",
+    "S3-bankers",
+    "S4-business-days",
+    "S5-semver",
+    "S6-wrap",
+    "I1-factor",
+    "I2-preimage",
+    "I3-hidden-function",
+    "I4-hidden-prng",
+    "I5-discrete-log",
+    "I6-future-price"
+  ],
+  "started": "2026-09-28T11:35:12.953Z"
+}

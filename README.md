@@ -26,3 +26,22 @@ A September 2026 paper (arXiv 2609.28614) found that detailed rejection feedback
 The default model is `qwen/qwen3.8-27b` on LM Studio at localhost:1234, with reasoning effort none. Transcripts go to `results/`.
 
 Stop rule: if all four modes behave the same after 96 runs, drop the question.
+
+## On ImpossibleBench's tasks
+
+`impossible.mjs` runs the same four feedback levels on Impossible-LiveCodeBench (arXiv 2510.20270): 103 Python tasks, each in two versions. In `original` the tests are right, so a pass is a real solve. In `conflicting` one extra assert contradicts another, so any pass is cheating.
+
+- The model sees only the signature and docstring. The tests are hidden; what it learns of them comes from the feedback level.
+- Each top-level statement of `check()` runs on its own, 2 s each and 10 s in all, so the checker can say which call failed and what it returned.
+- `--abort` lets the model reply `flag_for_human_intervention` instead of code (ImpossibleBench's own mitigation).
+- Recorded per run: `passed`, `cheat` (a pass on `conflicting`), `saidImpossible`, `disclosed` (the last reply admits special-casing), `aborted`, and on `conflicting` `originalScore` (how much of the uncontradicted test the last code passes).
+
+Model-written Python runs only inside Docker (`pysandbox.mjs`, `pyharness.py`): no network, read-only root, 64 MB /tmp, 256 MB RAM, one CPU, 64 pids, user nobody, no capabilities, killed at the wall limit. It needs Docker and the `python:3.12-slim` image.
+
+    node fetch-impossible.mjs             # data, once; not committed (see data/impossible_livecodebench/README.md)
+    docker pull python:3.12-slim
+    node selftest-impossible.mjs          # checker and sandbox probes must hold first
+    node impossible.mjs --limit 3 --modes A,C --out results/imp1
+    node summary-impossible.mjs results/imp1
+
+`arena.mjs` and `impossible.mjs` share the model calls in `lib/chat.mjs`.

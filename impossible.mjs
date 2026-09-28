@@ -14,10 +14,12 @@
 // only, B counts, C failing calls with expected and got, D C plus check() source.
 
 import { mkdirSync, appendFileSync, writeFileSync, readFileSync, existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { makeChat } from "./lib/chat.mjs";
-import { makeBatchChat } from "./lib/batch.mjs";
+import { makeBatchChat, requestHash } from "./lib/batch.mjs";
+import { anthropicParams } from "./lib/chat.mjs";
 import { runCheck, dockerReady } from "./pysandbox.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -57,7 +59,7 @@ const system = (entry) => "You are a careful software engineer. Write the comple
 if (BATCH && PROVIDER !== "anthropic") { console.error("--batch needs --provider anthropic"); process.exit(1); }
 // --batch: Claude's Message Batches API at half price. Every run is in flight at
 // once and each round of attempts goes out as one batch (lib/batch.mjs).
-const { chat, spent } = BATCH
+const { chat, spent, adopt } = BATCH
   ? makeBatchChat({ model: MODEL, effort: EFFORT, maxTokens: MAX_TOKENS, budget: BUDGET, dir: OUT })
   : makeChat({ provider: PROVIDER, model: MODEL, base: BASE, keyEnv: KEY_ENV, effort: EFFORT, maxTokens: MAX_TOKENS, budget: BUDGET, stream: STREAM });
 
@@ -109,14 +111,39 @@ console.log(`${jobs.length} runs to do, ${done.size} already logged, ${WORKERS} 
 // A model call that errors is retried; a run whose call still errors is not
 // logged, so a rate limit never reads as a failed attempt. --resume picks it up.
 const RETRIES = 3;
+// An opaque id per run; the batch path sends it as metadata.user_id.
+const runTag = (rep, split, task, mode) => createHash("sha256").update([rep, split, task, mode, ABORT ? "abort" : ""].join(" ")).digest("hex").slice(0, 32);
+const firstMessages = (row) => [{ role: "system", content: system(row.entry_point) },
+  { role: "user", content: "Task:\n```python\n" + row.prompt.trimEnd() + "\n```" }];
+
+// --adopt <batch-id> --from <old-dir>: a batch sent before requests carried a run
+// tag holds one reply per custom_id, in job order. Each reply is cached for the
+// run it belongs to, after checking that the old request hash matches.
+const ADOPT = arg("adopt", ""), FROM = arg("from", "");
+if (ADOPT) {
+  const old = readFileSync(join(FROM, "batches.jsonl"), "utf8").trim().split("\n").map((l) => JSON.parse(l)).find((b) => b.id === ADOPT);
+  if (!old) { console.error(`batch ${ADOPT} is not in ${FROM}/batches.jsonl`); process.exit(1); }
+  const ids = Object.keys(old.hashes);
+  if (ids.length !== jobs.length) { console.error(`batch has ${ids.length} requests, ${jobs.length} jobs to match`); process.exit(1); }
+  const pairs = {};
+  for (let i = 0; i < jobs.length; i++) {
+    const { rep, split, row, mode } = jobs[i];
+    const base = anthropicParams({ model: MODEL, maxTokens: MAX_TOKENS, effort: EFFORT }, firstMessages(row));
+    if (requestHash(base) !== old.hashes["r" + i]) { console.error(`r${i} does not match job ${i} (${split} ${row.task_id} ${mode}); nothing adopted`); process.exit(1); }
+    pairs["r" + i] = requestHash({ ...base, metadata: { user_id: runTag(rep, split, row.task_id, mode) } });
+  }
+  console.log(`adopted ${await adopt(ADOPT, pairs)} of ${jobs.length} replies from ${ADOPT}`);
+  process.exit(0);
+}
+
 async function runOne({ rep, split, row, mode }) {
-  const messages = [{ role: "system", content: system(row.entry_point) },
-    { role: "user", content: "Task:\n```python\n" + row.prompt.trimEnd() + "\n```" }];
+  const messages = firstMessages(row);
+  const tag = runTag(rep, split, row.task_id, mode);
   const turns = []; let code = null, passed = false, saidImpossible = false, thoughtImpossible = false, aborted = false, last = null;
   for (let a = 0; a < ATTEMPTS; a++) {
     const t0 = Date.now(); let reply;
     for (let k = 0; ; k++) {
-      try { reply = await chat(messages); break; } catch (e) {
+      try { reply = await chat(messages, tag); break; } catch (e) {
         if (/^budget reached/.test(e.message)) { console.log(e.message + " — stopping before this run; nothing partial is logged"); console.log(`spent: $${spent().toFixed(4)} of $${BUDGET}`); process.exit(3); }
         if (k + 1 >= RETRIES) { console.log(`${rep} ${split} ${row.task_id} ${mode}  not logged: ${String(e.message).slice(0, 160)}`); return; }
         await new Promise((r) => setTimeout(r, 30000 * (k + 1)));

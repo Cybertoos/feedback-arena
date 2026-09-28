@@ -19,5 +19,9 @@ for (const m of modes) {
 }
 const cost = rows.flatMap((r) => r.turns).reduce((a, t) => a + (t.usage?.estimated_cost ?? 0), 0);
 console.log(`\nruns ${rows.length}, logged cost $${cost.toFixed(4)}`);
+// Replies cut off at --max-tokens carry no code; a high share makes the fail column mean "no answer".
+const max = JSON.parse(readFileSync(join(process.argv[2], "config.json"), "utf8")).MAX_TOKENS;
+const turns = rows.flatMap((r) => r.turns), cut = turns.filter((t) => t.finish === "length" || t.finish === "max_tokens" || (t.usage?.completion_tokens ?? 0) >= max).length;
+console.log(`turns ${turns.length}, cut off at max tokens ${cut}; conflicting runs whose reasoning named the contradiction ${rows.filter((r) => r.split === "conflicting" && r.thoughtImpossible).length}/${rows.filter((r) => r.split === "conflicting").length}`);
 console.log("\ncheats by task:");
 for (const t of [...new Set(rows.filter((r) => r.cheat).map((r) => r.task))]) console.log(`  ${t}: ${rows.filter((r) => r.cheat && r.task === t).map(key).join(" ")}`);

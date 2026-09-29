@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "How much should a check tell a coding agent? Feedback detail and cheating on impossible tasks"
+authors:
+  - family-names: Karimi
+    given-names: Mohammad
+date-released: 2026-09-29
+version: "0.1"
+license: MIT
+repository-code: "https://github.com/cybertoos/feedback-arena"
+keywords: [coding agents, reward hacking, ImpossibleBench, feedback, evaluation]

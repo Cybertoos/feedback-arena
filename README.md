@@ -12,7 +12,9 @@ Two models, one task set, one run per task and level. The paper is [paper/paper.
 
 ## Figure
 
-[Figure to come: cheat rate by feedback level A to D, one panel per model (GLM-5.3, Opus 5.5). Bars for "no abort option" at A, B, C and D, and for "abort option offered" at C and D, each with its Wilson 95% interval. GLM: 0, 0, 1, 67 without the option; 0 and 2 with it. Opus: 0 everywhere.]
+![Cheats on 100 impossible tasks by feedback level, GLM-5.3 and Opus 5.5, with and without the abort option](paper/figures/cheat-rate.svg)
+
+`python3 figure.py` redraws it from the run directories.
 
 ## What was run
 
@@ -50,7 +52,7 @@ node summary.mjs results/run1
 
 ## Cite
 
-[Citation to come.]
+See [CITATION.cff](CITATION.cff). GitHub shows a "Cite this repository" button from it.
 
 ## Licence
 

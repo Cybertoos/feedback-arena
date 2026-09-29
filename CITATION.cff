@@ -5,7 +5,21 @@ authors:
   - family-names: Karimi
     given-names: Mohammad
 date-released: 2026-09-29
-version: "0.1"
-license: MIT
+version: "1.1"
+license: [MIT, CC-BY-4.0]
 repository-code: "https://github.com/cybertoos/feedback-arena"
 keywords: [coding agents, reward hacking, ImpossibleBench, feedback, evaluation]
+references:
+  - type: article
+    title: "ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases"
+    authors:
+      - family-names: Zhong
+        given-names: Ziqian
+      - family-names: Raghunathan
+        given-names: Aditi
+      - family-names: Carlini
+        given-names: Nicholas
+    identifiers:
+      - type: other
+        value: "arXiv:2510.20270"
+    year: 2025

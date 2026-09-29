@@ -1,6 +1,6 @@
 # Settings record
 
-Written 2026-09-29 from the run directories, logs and service units on the run host. Nothing here changes a run record.
+Written 2026-09-29 from the run directories, their logs and the commands that started them. Nothing here changes a run record.
 
 ## Models
 
@@ -41,19 +41,19 @@ node impossible.mjs --provider openai-compatible --model zai-org/GLM-5.3 --base 
 node impossible.mjs --provider anthropic --model claude-opus-5-5 --effort medium --max-tokens 128000 --budget 0 --out <dir> ...
 ```
 
-Arguments after `<dir> 0`:
+followed by these arguments:
 
 - GLM main: `results/impossible-glm-5.3-full 0 --splits original,conflicting --modes A,B,C,D --jobs 24 --resume --stream`
 - GLM abort, after main finished: `results/impossible-glm-5.3-abort 0 --splits conflicting --modes C,D --abort --jobs 24 --resume --stream`
 - Opus main: `results/impossible-opus-5.5-full 0 --splits original,conflicting --modes A,B,C,D --batch --resume`
 - Opus abort: `results/impossible-opus-5.5-abort 0 --splits conflicting --modes C,D --abort --batch --resume`
-- Opus main, once first, to recover the untagged first batch: `results/impossible-opus-5.5-full 0 --splits original,conflicting --modes A,B,C,D --batch --adopt msgbatch_017rfVzc7VoSmMnBJCvRq9QT --from results/impossible-opus-5.5-full-untagged`.
+- Opus main, once before the line above, to recover the untagged first batch: `results/impossible-opus-5.5-full 0 --splits original,conflicting --modes A,B,C,D --batch --adopt msgbatch_017rfVzc7VoSmMnBJCvRq9QT --from results/impossible-opus-5.5-full-untagged`.
 
-A watchdog drained the GLM runs (a `PAUSE` file) when DeepInfra refuses calls. No spending cap was set in the runner (`--budget 0`).
+A watchdog drained the GLM runs (a `PAUSE` file in the run directory) when DeepInfra refused calls. No spending cap was set in the runner (`--budget 0`).
 
 ## Spend
 
-Logged spend is the sum of `usage.estimated_cost` over every turn in the analysed `runs.jsonl` files. The `spent:` line in a log covers only the last process, so for GLM main it shows $86.48 against $137.14 in the records.
+Logged spend is the sum of `usage.estimated_cost` over every turn in the analysed `runs.jsonl` files. For GLM that number comes from DeepInfra: its API returns `estimated_cost` with each reply (`lib/chat.mjs`), at its list price of about $0.56 per million input and $2.50 per million output tokens. For Opus the runner computes it from token counts and its own price table (`PRICES` in `lib/chat.mjs`), at the batch rate. The `spent:` line in a log covers only the last process, so for GLM main it shows $86.48 against $137.14 in the records.
 
 | Matrix | Logged |
 |---|---|
@@ -62,6 +62,6 @@ Logged spend is the sum of `usage.estimated_cost` over every turn in the analyse
 | Opus main | $67.55 |
 | Opus abort | $7.69 |
 
-The DeepInfra console showed about 1.4 times the logged GLM figure. The logged figure uses the runner's own price table and is the lower one. The untagged Opus batches were paid for. The main one was adopted into the main run, so its turns are in the Opus main figure; the untagged abort batch was set aside and its cost is in no row above.
+The DeepInfra console showed about 1.4 times the logged GLM figure. The logged figure counts only calls whose reply was kept in an analysed run. Calls in runs that were cut short when the GLM run was stopped and restarted (twice) or drained, retries of failed calls, and the set-aside 32,000-token runs are billed but not in these rows. The console figure is the one that was paid; the split between those causes was not measured. The untagged Opus batches were paid for. The main one was adopted into the main run, so its turns are in the Opus main figure; the untagged abort batch was set aside and its cost is in no row above.
 
 The Opus `config.json` files in this repo's runs recorded `BASE` as `http://localhost:1234/v1`, the runner's LM Studio default, which the Anthropic path never reads: `lib/chat.mjs` and `lib/batch.mjs` build `new Anthropic()` with no base URL, so every Opus request went to `api.anthropic.com` through the Message Batches API. The release bundle records the real endpoint, and the runner now does too.

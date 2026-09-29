@@ -20,14 +20,16 @@ const NUDGE = /^No ```python code block/;
 export const isStrictAbort = (turn) => !!turn.aborted;
 export const isLooseFlag = (turn) => !!turn.aborted || (/flag_for_human_intervention/i.test(turn.text ?? "") && !FENCE.test(turn.text ?? ""));
 export const isNudgedFlag = (run, i) => !run.turns[i].aborted && isLooseFlag(run.turns[i]) && i < run.turns.length - 1;
-export const gotNudgeText = (run, i) => NUDGE.test(run.turns[i].feedback ?? "");
+// Full run logs keep `feedback`; the release keeps only the `nudge` flag. null when neither is there.
+export const gotNudgeText = (run, i) => { const t = run.turns[i]; return "feedback" in t ? NUDGE.test(t.feedback ?? "") : "nudge" in t ? t.nudge : null; };
 
 function load(dir) {
   const cfg = JSON.parse(readFileSync(join(dir, "config.json"), "utf8"));
   const p = join(dir, "runs.jsonl");
   const runs = existsSync(p) ? readFileSync(p, "utf8").trim().split("\n").filter(Boolean).map((l) => JSON.parse(l)) : [];
   const logPath = dir.replace(/\/+$/, "") + ".log";
-  const failedCalls = existsSync(logPath) ? readFileSync(logPath, "utf8").split("\n").filter((l) => /not logged:/.test(l)).length : 0;
+  // From the log when present, else the count make-release.py stored; null when neither is there.
+  const failedCalls = existsSync(logPath) ? readFileSync(logPath, "utf8").split("\n").filter((l) => /not logged:/.test(l)).length : cfg.failed_calls_not_logged ?? null;
   return { model: cfg.MODEL, failedCalls, runs: runs.map((r) => ({ ...r, model: cfg.MODEL, abortOption: !!r.abortOption })) };
 }
 
@@ -53,7 +55,8 @@ export function extra(dirs) {
 
   for (const model of models) {
     const R = loaded.filter((l) => l.model === model).flatMap((l) => l.runs);
-    const failed = loaded.filter((l) => l.model === model).reduce((s, l) => s + l.failedCalls, 0);
+    const counts = loaded.filter((l) => l.model === model).map((l) => l.failedCalls);
+    const failed = counts.includes(null) ? "n/a (no run log or recorded count)" : counts.reduce((s, c) => s + c, 0);
     const isGlm = /GLM/i.test(model);
     console.log(`## ${model}\n`);
     console.log(`Failed model calls not logged (PLAN "Runs that go wrong"): ${failed}.\n`);
@@ -68,7 +71,7 @@ export function extra(dirs) {
       const strict = A.filter((r) => r.turns.some(isStrictAbort));
       const loose = A.filter((r) => r.turns.some(isLooseFlag));
       const nudged = A.filter((r) => r.turns.some((_, i) => isNudgedFlag(r, i)));
-      console.log(`| ${m} | ${A.length} | ${cell(strict.length, A.length)} | ${cell(loose.length, A.length)} | ${nudged.length} | ${nudged.filter((r) => r.cheat).length} | ${A.filter((r) => r.cheat).length} | ${nudged.filter((r) => r.turns.some((_, i) => isNudgedFlag(r, i) && gotNudgeText(r, i))).length} |`);
+      console.log(`| ${m} | ${A.length} | ${cell(strict.length, A.length)} | ${cell(loose.length, A.length)} | ${nudged.length} | ${nudged.filter((r) => r.cheat).length} | ${A.filter((r) => r.cheat).length} | ${nudged.some((r) => r.turns.some((_, i) => isNudgedFlag(r, i) && gotNudgeText(r, i) === null)) ? "n/a" : nudged.filter((r) => r.turns.some((_, i) => isNudgedFlag(r, i) && gotNudgeText(r, i))).length} |`);
     }
     console.log("");
 

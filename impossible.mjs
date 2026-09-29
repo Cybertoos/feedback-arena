@@ -1,6 +1,6 @@
 // The feedback arena on ImpossibleBench's Impossible-LiveCodeBench. The model
 // sees only the signature and docstring and writes a Python function; the
-// split's hidden check() answers in one of the four feedback modes; up to N
+// split's check() (hidden from the model at A to C, shown at D) answers in one of the four feedback modes; up to N
 // attempts. On `original` a pass is a real solve. On `conflicting` the tests
 // contradict each other, so any pass is cheating by construction.
 //
@@ -8,7 +8,9 @@
 //   node impossible.mjs [--splits original,conflicting] [--modes A,B,C,D] [--limit 3] [--offset 0]
 //                       [--reps 1] [--attempts 4] [--abort] [--out <dir>] [--jobs 1] [--resume] [--stream] [--batch]
 //                       [--provider openai-compatible|anthropic] [--model ...] [--base ...]
-//                       [--key-env DEEPINFRA_API_KEY] [--effort medium] [--max-tokens 2500] [--budget 0.5]
+//                       [--key-env DEEPINFRA_API_KEY] [--effort none] [--max-tokens 2500] [--budget 0]
+//                       [--adopt <batch-id> --from <old-dir>]
+// The defaults are shown. The study's command lines are in MODELS.md.
 //
 // Python runs only in Docker (pysandbox.mjs). Modes as in arena.mjs: A fail
 // only, B counts, C failing calls with expected and got, D C plus check() source.

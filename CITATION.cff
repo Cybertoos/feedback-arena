@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it as below."
-title: "How much should a check tell a coding agent? Feedback detail and cheating on impossible tasks"
+title: "How much should a checker tell a coding agent? A graded feedback ladder on impossible tasks"
 authors:
   - family-names: Karimi
     given-names: Mohammad

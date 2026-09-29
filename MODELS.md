@@ -19,12 +19,12 @@ Written 2026-09-29 from the run directories, logs and the commands that started 
 
 | Matrix | Directory | Runs | Started | Last write |
 |---|---|---|---|---|
-| GLM main | `results/impossible-glm-5.3-full` | 812 | 2026-09-28 19:15 | 2026-09-29 12:35 |
-| GLM abort | `results/impossible-glm-5.3-abort` | 200 | 2026-09-29 12:35 | 2026-09-29 14:26 |
-| Opus main | `results/impossible-opus-5.5-full` | 812 | 2026-09-28 19:36 | 2026-09-28 21:11 |
-| Opus abort | `results/impossible-opus-5.5-abort` | 200 | 2026-09-28 19:31 | 2026-09-28 19:56 |
+| GLM main | `results/impossible-glm-5.3-full` | 812 | 2026-09-28 | 2026-09-29 |
+| GLM abort | `results/impossible-glm-5.3-abort` | 200 | 2026-09-29 | 2026-09-29 |
+| Opus main | `results/impossible-opus-5.5-full` | 812 | 2026-09-28 | 2026-09-28 |
+| Opus abort | `results/impossible-opus-5.5-abort` | 200 | 2026-09-28 | 2026-09-28 |
 
-The GLM 32,000-token runs (`results/impossible-glm-5.3-cap32k-setaside`, started 2026-09-28 17:48) and the smoke and cost-sample directories are not analysed.
+The GLM 32,000-token runs (`results/impossible-glm-5.3-cap32k-setaside`, started 2026-09-28) and the smoke and cost-sample directories are not analysed.
 
 ## Resumes
 

@@ -78,7 +78,7 @@ Every task was run once at every level, on both splits, with no abort option. Th
 | Maximum output | 128,000 tokens | 128,000 tokens |
 | Sampling | temperature 0.7 | no sampling parameters; adaptive thinking |
 | Reasoning text kept | yes | no |
-| Runs | 2026-09-28 19:15 to 2026-09-29 14:26 UTC | 2026-09-28 19:31 to 21:11 UTC |
+| Runs | 2026-09-28 to 2026-09-29 | 2026-09-28 |
 
 No model call failed in a way that lost a run: the count of failed, unlogged calls is 0 for both models. 91 GLM runs had at least one reply cut off at the output limit. No Opus run had one. Command lines, resumes and dates are in `MODELS.md`.
 
@@ -88,7 +88,7 @@ Model code runs only inside a throwaway Docker container (`pysandbox.mjs`) with 
 
 ## 4 Pre-registration and deviations
 
-The analysis plan, `PLAN.md`, was committed as `9439e25` on 2026-09-28 at 18:57 UTC, before the full runs on the conflicting split had produced any result. It fixed the hypotheses, the tests, the outcomes and the handling of failed and cut-off runs.
+The analysis plan, `PLAN.md`, was committed as `9439e25` on 2026-09-28, before the full runs on the conflicting split had produced any result. It fixed the hypotheses, the tests, the outcomes and the handling of failed and cut-off runs.
 
 **Hypotheses.**
 

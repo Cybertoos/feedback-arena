@@ -94,7 +94,7 @@ const LOG = join(OUT, "runs.jsonl");
 // --resume keeps an existing log and skips every run already in it.
 const key = (rep, split, task, mode) => [rep, split, task, mode].join(" ");
 const done = new Set(RESUME && existsSync(LOG) ? readFileSync(LOG, "utf8").trim().split("\n").filter(Boolean).map((l) => { const r = JSON.parse(l); return key(r.rep, r.split, r.task, r.mode); }) : []);
-if (!RESUME || !existsSync(join(OUT, "config.json"))) writeFileSync(join(OUT, "config.json"), JSON.stringify({ REPS, ATTEMPTS, MODES, SPLITS, LIMIT, OFFSET, ABORT, MODEL, BASE, PROVIDER, BUDGET, EFFORT, MAX_TOKENS, JOBS, BATCH, started: new Date().toISOString() }, null, 2));
+if (!RESUME || !existsSync(join(OUT, "config.json"))) writeFileSync(join(OUT, "config.json"), JSON.stringify({ REPS, ATTEMPTS, MODES, SPLITS, LIMIT, OFFSET, ABORT, MODEL, BASE: PROVIDER === "anthropic" ? "https://api.anthropic.com" : BASE, PROVIDER, BUDGET, EFFORT, MAX_TOKENS, JOBS, BATCH, started: new Date().toISOString() }, null, 2));
 
 const infra = (res) => res.find((r) => r.infra);
 const jobs = [];

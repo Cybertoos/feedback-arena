@@ -18,6 +18,9 @@ for d in DIRS:
     dst.mkdir(parents=True, exist_ok=True)
     cfg = json.loads((src / "config.json").read_text())
     cfg["started"] = cfg.get("started", "")[:10]
+    if cfg.get("PROVIDER") == "anthropic":
+        cfg["BASE"] = "https://api.anthropic.com"
+        cfg["BASE_NOTE"] = "recorded as the unused LM Studio default; the Anthropic SDK called api.anthropic.com (Message Batches)"
     (dst / "config.json").write_text(json.dumps(cfg, indent=2) + "\n")
     n = 0
     with (dst / "runs.jsonl").open("w") as f:

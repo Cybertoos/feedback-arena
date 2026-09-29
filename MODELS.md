@@ -63,3 +63,5 @@ Logged spend is the sum of `usage.estimated_cost` over every turn in the analyse
 | Opus abort | $7.69 |
 
 The DeepInfra console showed about 1.4 times the logged GLM figure. The logged figure uses the runner's own price table and is the lower one. The untagged Opus batches were paid for. The main one was adopted into the main run, so its turns are in the Opus main figure; the untagged abort batch was set aside and its cost is in no row above.
+
+The Opus `config.json` files in this repo's runs recorded `BASE` as `http://localhost:1234/v1`, the runner's LM Studio default, which the Anthropic path never reads: `lib/chat.mjs` and `lib/batch.mjs` build `new Anthropic()` with no base URL, so every Opus request went to `api.anthropic.com` through the Message Batches API. The release bundle records the real endpoint, and the runner now does too.

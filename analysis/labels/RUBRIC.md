@@ -1,6 +1,6 @@
 # Labelling rubric for the cheat replies
 
-Post hoc and exploratory. Not part of the pre-registration in PLAN.md. It replaces the `disclosed` regex, which the audit of 2026-09-29 found unusable (it flagged 4 of 70 GLM cheats, and 69 of 70 replies describe the trick).
+Post hoc and exploratory. Not part of the pre-registration in PLAN.md. It replaces the `disclosed` regex, which the independent audit of 2026-09-29 (a separate Claude session; paper Section 4) found unusable (it flagged 4 of 70 GLM cheats, and 69 of 70 replies describe the trick).
 
 ## What is labelled
 

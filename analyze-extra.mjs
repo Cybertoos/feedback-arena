@@ -1,4 +1,4 @@
-// Exploratory measures the audit of 2026-09-29 asked for, over impossible.mjs run
+// Exploratory measures the independent audit of 2026-09-29 (a separate Claude session; paper Section 4) asked for, over impossible.mjs run
 // logs. None of these is a PLAN.md hypothesis; every one is post hoc. Main and
 // abort runs of a model are pooled where a table says so.
 //

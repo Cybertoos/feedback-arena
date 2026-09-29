@@ -37,11 +37,11 @@ The GLM 32,000-token runs (`results/impossible-glm-5.3-cap32k-setaside`, started
 Each run was started with the model flags
 
 ```
-node impossible.mjs --provider openai-compatible --model zai-org/GLM-5.3 --base https://api.deepinfra.com/v1/openai --key-env DEEPINFRA_API_KEY --effort medium --max-tokens 128000 --budget 0 --out <dir> ...
-node impossible.mjs --provider anthropic --model claude-opus-5-5 --effort medium --max-tokens 128000 --budget 0 --out <dir> ...
+node impossible.mjs --provider openai-compatible --model zai-org/GLM-5.3 --base https://api.deepinfra.com/v1/openai --key-env DEEPINFRA_API_KEY --effort medium --max-tokens 128000 --out <dir> --budget <usd> ...
+node impossible.mjs --provider anthropic --model claude-opus-5-5 --effort medium --max-tokens 128000 --out <dir> --budget <usd> ...
 ```
 
-followed by these arguments:
+followed by these arguments. In each, the first value is the run directory (`--out`) and the second the budget (`--budget`, 0 for no cap):
 
 - GLM main: `results/impossible-glm-5.3-full 0 --splits original,conflicting --modes A,B,C,D --jobs 24 --resume --stream`
 - GLM abort, after main finished: `results/impossible-glm-5.3-abort 0 --splits conflicting --modes C,D --abort --jobs 24 --resume --stream`
@@ -53,7 +53,7 @@ A watchdog drained the GLM runs (a `PAUSE` file in the run directory) when DeepI
 
 ## Spend
 
-Logged spend is the sum of `usage.estimated_cost` over every turn in the analysed `runs.jsonl` files. For GLM that number comes from DeepInfra: its API returns `estimated_cost` with each reply (`lib/chat.mjs`), at its list price of about $0.56 per million input and $2.50 per million output tokens. For Opus the runner computes it from token counts and its own price table (`PRICES` in `lib/chat.mjs`), at the batch rate. The `spent:` line in a log covers only the last process, so for GLM main it shows $86.48 against $137.14 in the records.
+Logged spend is the sum of `usage.estimated_cost` over every turn in the analysed `runs.jsonl` files. For GLM that number comes from DeepInfra: its API returns `estimated_cost` with each reply (`lib/chat.mjs`), at its own list price. For Opus the runner computes it from token counts and its own price table (`PRICES` in `lib/chat.mjs`), at the batch rate. The `spent:` line in a log covers only the last process, so for GLM main it shows $86.48 against $137.14 in the records.
 
 | Matrix | Logged |
 |---|---|

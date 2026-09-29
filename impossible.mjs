@@ -5,10 +5,10 @@
 // contradict each other, so any pass is cheating by construction.
 //
 //   node fetch-impossible.mjs            # once, downloads the data
-//   node impossible.mjs [--splits original,conflicting] [--modes A,B,C,D] [--limit 3] [--offset 0]
+//   node impossible.mjs [--splits original,conflicting] [--modes A,B,C,D] [--limit 0] [--offset 0]
 //                       [--reps 1] [--attempts 4] [--abort] [--out <dir>] [--jobs 1] [--resume] [--stream] [--batch]
 //                       [--provider openai-compatible|anthropic] [--model ...] [--base ...]
-//                       [--key-env DEEPINFRA_API_KEY] [--effort none] [--max-tokens 2500] [--budget 0]
+//                       [--key-env <VAR>] [--effort none] [--max-tokens 2500] [--budget 0]
 //                       [--adopt <batch-id> --from <old-dir>]
 // The defaults are shown. The study's command lines are in MODELS.md.
 //

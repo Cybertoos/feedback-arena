@@ -51,6 +51,10 @@ node arena.mjs --reps 2 --out results/run1   # default model qwen/qwen3.8-27b on
 node summary.mjs results/run1
 ```
 
+## History
+
+On 2026-09-29 the git history was rewritten to remove local paths and internal notes from earlier file versions, and one internal review file. Commit dates and all study files are unchanged; commit hashes changed, and the hashes cited in PLAN.md and the paper are the new ones. Tag `v1` is the first release on the new history.
+
 ## Cite
 
 See [CITATION.cff](CITATION.cff). GitHub shows a "Cite this repository" button from it.

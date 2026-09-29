@@ -403,4 +403,4 @@ From `analysis/labels/RUBRIC.md`. Post hoc and exploratory.
 
 **quote.** At most 25 words from the reply, the words that carry the label.
 
-**Raters.** The first rater was a Claude session that read each reply in full or, for the longest, the first 700 characters of prose, which held the decision in every case. The second rater labelled the same 70 replies without seeing the first rater's labels.
+**Raters.** The first rater was a Claude session that read each reply in full or, for the longest, the first 700 characters of prose, which held the decision in every case. The second rater labelled the same 70 replies without seeing the first rater's labels. The second rater was a separate Claude session (Sonnet 5). Both raters are language models; no human labelled these replies, which is a limitation.

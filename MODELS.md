@@ -1,6 +1,6 @@
 # Settings record
 
-Written 2026-09-29 from the run directories, logs and the commands that started them. Nothing here changes a run record.
+Written 2026-09-29 from the run directories, logs and service units on the run host. Nothing here changes a run record.
 
 ## Models
 

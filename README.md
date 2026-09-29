@@ -33,10 +33,10 @@ npm install
 node fetch-impossible.mjs              # the task data, not redistributed; see data/impossible_livecodebench/README.md
 docker pull python:3.12-slim
 node selftest-impossible.mjs           # the checker and sandbox probes must hold first
-./analyze-all.sh                       # every table in the paper, from the run directories
+./analyze-all.sh                       # every table in the paper; needs the run records below
 ```
 
-`./analyze-all.sh` reads the four run directories under `results/`. They are not in git yet, because the run logs embed the task tests. A release without the task text is planned.
+The run records are a release asset, not in git: download `feedback-arena-runs-v1.tar.gz` from the [v1 release](https://github.com/cybertoos/feedback-arena/releases/tag/v1) and unpack it at the repo root (`tar xzf feedback-arena-runs-v1.tar.gz`). It holds all 2,024 runs of both models without the task tests (`make-release.py` builds it). `./analyze-all.sh` then prints every table in the paper, and `python3 figure.py` redraws the figure.
 
 To run a model yourself, see the flags at the top of `impossible.mjs` and the command lines in `MODELS.md`. Model code runs only in a Docker container with no network, a read-only filesystem and user `nobody` (`pysandbox.mjs`).
 

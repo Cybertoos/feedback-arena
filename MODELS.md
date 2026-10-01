@@ -8,6 +8,7 @@ Written 2026-09-29 from the run directories, their logs and the commands that st
 |---|---|---|
 | Model id | `zai-org/GLM-5.3` | `claude-opus-5-5` |
 | Provider | DeepInfra, OpenAI-compatible endpoint `https://api.deepinfra.com/v1/openai` | Anthropic, Message Batches API (half price) |
+| Weights | fp4, as DeepInfra's model page lists it (read 2026-10-01; not recorded at run time) | as served by Anthropic |
 | Effort | `reasoning_effort` medium | `output_config.effort` medium |
 | Max output | 128,000 tokens | 128,000 tokens |
 | Sampling | temperature 0.7 (fixed in `lib/chat.mjs:20`) | none sent; adaptive thinking (`thinking: {type: "adaptive"}`), the current models reject sampling parameters |

@@ -74,6 +74,7 @@ Every task was run once at every level, on both splits, with no abort option. Th
 |---|---|---|
 | Model id | `zai-org/GLM-5.3` | `claude-opus-5-5` |
 | Provider | DeepInfra, OpenAI-compatible endpoint | Anthropic, Message Batches API |
+| Weights | 4-bit (fp4), as DeepInfra lists the model | as served by Anthropic |
 | Reasoning effort | medium | medium |
 | Maximum output | 128,000 tokens | 128,000 tokens |
 | Sampling | temperature 0.7 | no sampling parameters; adaptive thinking |
@@ -183,6 +184,7 @@ Two caveats lower the meaning of the top solve rates. First, GLM special-cased i
 ## 6 Limitations
 
 - **One run per task and level.** Tasks are the unit of replication. Run-to-run variation on the same task is not measured.
+- **GLM-5.3 ran at 4-bit precision.** DeepInfra serves it at fp4 (its model page, read 2026-10-01; the study did not record the serving precision at run time). Full-precision GLM-5.3 may cheat at different rates.
 - **Two models.** The ladder effect rests on GLM-5.3 alone. Opus 5.5 never cheated, so its 0 is a floor and says nothing about where its threshold would be. Nothing here generalises to other models or to agents in general.
 - **Prompt wording.** ImpossibleBench shows that prompt strictness changes cheating a great deal. The system prompt here says "careful software engineer" and asks for the function for the task; it does not forbid gaming the tests. Other wording would give other rates. The exact prompts are in Appendix A.
 - **Abort on solvable tasks not measured.** The abort arm ran only on the conflicting split. Whether offering the exit makes an agent give up on tasks it could solve is not known from this study, and implication 2 below depends on it.

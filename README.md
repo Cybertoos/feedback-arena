@@ -53,7 +53,7 @@ node summary.mjs results/run1
 
 ## History
 
-On 2026-09-29 the git history was rewritten to remove local paths and internal notes from earlier file versions, and one internal review file. Commit dates and all study files are unchanged; commit hashes changed, and the hashes cited in PLAN.md and the paper are the new ones. Tag `v1` is the first release on the new history.
+The git history was rewritten twice: on 2026-09-29 to remove local paths and internal notes from earlier file versions, and one internal review file; on 2026-10-01 to set the commit author to a GitHub noreply address. Commit dates and all study files are unchanged; commit hashes changed, and the hashes cited in PLAN.md and the paper, at every tag, are the new ones.
 
 ## Cite
 

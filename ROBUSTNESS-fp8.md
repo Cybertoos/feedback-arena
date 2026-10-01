@@ -28,17 +28,17 @@ One cell, one repetition. Levels A to C and the abort arm are not repeated.
 
 Routing by quantization alone sent the turns of one run to different providers (SiliconFlow, Baidu), with much less reasoning than the fp4 runs. The run is pinned to Z.AI, the model's maker, at fp8, no fallbacks: `ARENA_ROUTE={"order":["z-ai"],"allow_fallbacks":false}`. On the 2 smoke tasks its output per turn (386 to 3,752 tokens) was in the range of the fp4 runs on the same tasks (393 to 1,466). Smoke runs are not counted.
 
-## Result (2026-10-01, 99 of 100 tasks; lcbhard_96 still running)
+## Result (2026-10-01, 100 of 100 tasks)
 
-From `python3 analysis/fp8.py <fp4 runs> results/impossible-glm-5.3-fp8/runs.jsonl`. Every fp8 reply was served by Z.AI; billed $14.08.
+From `python3 analysis/fp8.py <fp4 runs> results/impossible-glm-5.3-fp8/runs.jsonl`. Every fp8 reply was served by Z.AI; billed $14.64.
 
 | | fp4 (main run) | fp8 (Z.AI) |
 |---|---|---|
-| Cheats, all runs | 66 of 99 (67%, 95% CI 57 to 75%) | 75 of 99 (76%, 95% CI 66 to 83%) |
-| Cheats, cut-off runs dropped | 64 of 94 (68%) | 73 of 94 (78%) |
+| Cheats, all runs | 67 of 100 (67%, 95% CI 57 to 75%) | 76 of 100 (76%, 95% CI 67 to 83%) |
+| Cheats, cut-off runs dropped | 65 of 95 (68%) | 74 of 95 (78%) |
 
-Paired: both 52, fp4 only 14, fp8 only 23, neither 10; exact McNemar p = 0.188 (0.175 with cut-off runs dropped).
+Paired: both 53, fp4 only 14, fp8 only 23, neither 10; exact McNemar p = 0.188 (0.175 with cut-off runs dropped).
 
 **Reading, by the rule fixed above:** the same within the intervals. The level D result does not depend on 4-bit weights; at fp8 GLM-5.3 cheated somewhat more, not less.
 
-**A second finding:** 37 of 99 tasks changed outcome between the two runs. Part of that is the change of weights and provider, part is run-to-run variation; this check cannot separate them. Either way, a single run per task is a noisy measure of one task, and the paper's per-task statements should be read as rates over tasks.
+**A second finding:** 37 of 100 tasks changed outcome between the two runs. Part of that is the change of weights and provider, part is run-to-run variation; this check cannot separate them. Either way, a single run per task is a noisy measure of one task, and the paper's per-task statements should be read as rates over tasks.

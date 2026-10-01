@@ -23,3 +23,7 @@ The level D, conflicting split cell only: 100 tasks, one run each, 4 attempts, s
 ## Not a re-run of the paper
 
 One cell, one repetition. Levels A to C and the abort arm are not repeated.
+
+## Change before the main run (2026-10-01, after a 1-task and a 2-task smoke)
+
+Routing by quantization alone sent the turns of one run to different providers (SiliconFlow, Baidu), with much less reasoning than the fp4 runs. The run is pinned to Z.AI, the model's maker, at fp8, no fallbacks: `ARENA_ROUTE={"order":["z-ai"],"allow_fallbacks":false}`. On the 2 smoke tasks its output per turn (386 to 3,752 tokens) was in the range of the fp4 runs on the same tasks (393 to 1,466). Smoke runs are not counted.
